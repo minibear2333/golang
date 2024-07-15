@@ -10,8 +10,8 @@
 
 ```go
 for{
-fmt.Println(time.Now())
-time.Sleep(time.Second*1)
+    fmt.Println(time.Now())
+    time.Sleep(time.Second*1)
 }
 ```
 
@@ -38,18 +38,18 @@ fmt.Println(time.Now())
 但是以上只是做到延迟一次性执行，我们来改造一下，把他变成定时器。
 
 ```go
-    done := make(chan struct{})
+done := make(chan struct{})
 timer := time.NewTimer(1 * time.Second)
 go func () {
-for {
-select {
-case <-timer.C:
-fmt.Println(time.Now())
-timer.Reset(1 * time.Second)
-case <-done:
-return
-}
-}
+    for {
+        select {
+            case <-timer.C:
+            fmt.Println(time.Now())
+            timer.Reset(1 * time.Second)
+            case <-done:
+            return
+        }
+    }
 }()
 <-time.After(5*time.Second + time.Millisecond*100)
 done <- struct{}{}
@@ -66,10 +66,10 @@ done <- struct{}{}
 ```go
 ticker := time.NewTicker(1 * time.Second)
 go func () {
-for {
-<-ticker.C
-fmt.Println(time.Now())
-}
+    for {
+        <-ticker.C
+        fmt.Println(time.Now())
+    }
 }()
 <-time.After(5 * time.Second + time.Millisecond*100)
 ticker.Stop()
